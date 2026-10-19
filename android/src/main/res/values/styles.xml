@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+      Theme that blocks the Wear swipe-to-dismiss gesture on every version,
+      including Wear OS 3 / API 30 where there is no runtime alternative.
+
+      `SizzleWearable.display.setSwipeToDismissEnabled()` can toggle this at
+      runtime, but only on API 33+ where the back gesture routes through
+      OnBackInvokedDispatcher. Below that the gesture is handled at the window
+      level and never becomes a back press, so this theme attribute - read
+      once at window creation - is the only lever.
+
+      Apply it to the activity in the app's own manifest:
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/SizzleWearableNoDismiss" />
+
+      Most full-screen games want this. Leave it off if the game genuinely
+      wants the dismiss gesture available and only blocks it occasionally,
+      which works on API 33+ only.
+    -->
+    <style name="SizzleWearableNoDismiss" parent="@android:style/Theme.DeviceDefault">
+        <item name="android:windowSwipeToDismiss">false</item>
+    </style>
+
+</resources>

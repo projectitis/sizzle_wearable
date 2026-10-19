@@ -1,0 +1,8 @@
+# Matches the sizzle engine's analysis setup so the two packages share one
+# style. See sizzle/analysis_options.yaml.
+
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    require_trailing_commas: true

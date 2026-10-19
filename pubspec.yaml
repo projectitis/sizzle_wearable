@@ -1,0 +1,29 @@
+name: sizzle_wearable
+description: "Wear OS platform support for the Sizzle game engine"
+version: 0.1.0
+repository: https://github.com/projectitis/sizzle_wearable
+publish_to: 'none' # Remove this line once ready to publish to pub.dev
+
+environment:
+  # Matches sizzle's own constraint rather than the scaffold default, so the
+  # two packages can always resolve together.
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sizzle:
+    path: D:/Projects/flutter/sizzle
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: io.paraplu.sizzle_wearable
+        pluginClass: SizzleWearablePlugin
