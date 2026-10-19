@@ -4,6 +4,7 @@ import 'package:sizzle/sizzle.dart';
 import 'ambient.dart';
 import 'display.dart';
 import 'frame_rate_provider.dart';
+import 'haptics.dart';
 import 'power.dart';
 import 'rotary.dart';
 
@@ -45,6 +46,7 @@ class SizzleWearable {
 
   static final Rotary _rotary = Rotary(_rotaryEvents);
   static final WearableDisplay _display = WearableDisplay(_methods);
+  static final Haptics _haptics = Haptics(_methods);
   static final WearableFrameRateProvider _frameRate =
       WearableFrameRateProvider(_methods);
   static final AmbientWearProvider _ambient =
@@ -138,6 +140,13 @@ class SizzleWearable {
   /// Display shape and window behaviour. See [WearableDisplay].
   static WearableDisplay get display => _display;
 
+  /// The vibrator. See [Haptics].
+  ///
+  /// Works on any Android device the plugin is registered on, not only a
+  /// watch, so a phone build used during development vibrates too. Off
+  /// Android every call does nothing.
+  static Haptics get haptics => _haptics;
+
   /// Wires the plugin into Sizzle and reports whether it found Wear OS.
   ///
   /// Registers [WearableFrameRateProvider] into `Device.hwFrameRateProvider`,
@@ -157,6 +166,9 @@ class SizzleWearable {
     } on PlatformException {
       _isSupported = false;
     }
+
+    // Asked whether or not this is a watch: see [haptics].
+    await _haptics.info();
 
     if (_isSupported) {
       _frameRate.supported = true;

@@ -46,6 +46,7 @@ class SizzleWearablePlugin :
     private lateinit var methodChannel: MethodChannel
     private lateinit var rotaryChannel: EventChannel
     private var applicationContext: Context? = null
+    private var haptics: Haptics? = null
     private var activity: Activity? = null
     private var rotarySink: EventChannel.EventSink? = null
     private lateinit var ambientChannel: EventChannel
@@ -256,6 +257,7 @@ class SizzleWearablePlugin :
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = binding.applicationContext
+        haptics = Haptics(binding.applicationContext)
         methodChannel = MethodChannel(binding.binaryMessenger, "sizzle_wearable")
         methodChannel.setMethodCallHandler(this)
         rotaryChannel = EventChannel(binding.binaryMessenger, "sizzle_wearable/rotary")
@@ -274,6 +276,9 @@ class SizzleWearablePlugin :
         ambientChannel.setStreamHandler(null)
         powerStreamHandler.onCancel(null)
         powerChannel.setStreamHandler(null)
+        haptics?.cancel()
+        haptics?.dispose()
+        haptics = null
         applicationContext = null
     }
 
@@ -394,6 +399,15 @@ class SizzleWearablePlugin :
             }
             "clearFrameRate" -> {
                 setFrameRate(0f)
+                result.success(null)
+            }
+            "hapticsInfo" -> result.success(haptics?.info())
+            "hapticPlay" -> {
+                haptics?.play(call)
+                result.success(null)
+            }
+            "hapticCancel" -> {
+                haptics?.cancel()
                 result.success(null)
             }
             else -> result.notImplemented()

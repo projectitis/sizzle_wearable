@@ -155,6 +155,46 @@ of making it ambient, so the documented "apps targeting SDK 36 are always-on
 automatically" does not hold there. Handle ambient so the game idles politely
 where it does occur, but never build gameplay on ambient ticks.
 
+## Haptics
+
+`SizzleWearable.haptics` plays vibration effects described as **tiers, best
+first**; the first tier the device supports is played:
+
+```dart
+const HapticEffect thud = HapticEffect(<HapticTier>[
+  HapticComposition(<HapticPart>[HapticPart(HapticPrimitive.thud)]),
+  HapticPredefined(HapticPreset.heavyClick),
+  HapticWaveform(<HapticStep>[HapticStep(40, 1.0)]),
+]);
+
+SizzleWearable.haptics.play(thud); // fire-and-forget
+SizzleWearable.haptics.cancel();
+```
+
+- `attach()` asks the vibrator what it can do (`haptics.info()`), on any
+  Android device, not only a watch. Until it has answered, and off Android,
+  `play` and `cancel` do nothing.
+- A waveform plays on any vibrator. Without amplitude control its non-zero
+  steps play at full strength, so it degrades to on/off with the same timing.
+- Effects use the media vibration usage (`USAGE_MEDIA`, or
+  `AudioAttributes.USAGE_GAME` below API 33), which Android documents for
+  games: the media vibration strength scales them and the touch-vibration
+  switch does not silence them.
+- A new effect replaces whatever is playing. Priorities between effects are
+  the game's to enforce.
+- The plugin declares `VIBRATE`, a normal permission granted at install.
+- Every vibrator call runs on a background thread. Since Flutter 3.29 Dart runs on Android's main
+  thread, and one `vibrate()` there measured 10.9 ms on a Galaxy Watch5, enough to stall a frame.
+
+**What watches support differs a lot.** Probed 2026-10-19 with
+`dumpsys vibrator_manager`: every watch had amplitude control and CLICK, TICK,
+HEAVY_CLICK and DOUBLE_CLICK. A Galaxy Watch5 had **no composition primitives
+at all**; a TicWatch Pro 5 and a Pixel Watch 3 had all of them, but with
+lengths that differ by up to 30× (THUD 21 ms against 247 ms). THUD and POP are
+not offered as presets because the Pixel Watch 3 silently plays nothing for
+them. So the predefined effects and waveforms are the portable base, and a
+composition is an enhancement that has to be checked on every watch it plays on.
+
 ## Out of scope
 
 **Complications and tiles.** `ComplicationDataSourceService` and `TileService`
