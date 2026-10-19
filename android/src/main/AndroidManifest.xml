@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="io.paraplu.sizzle_wearable">
 
-  <!-- No permissions required. Ambient transitions are observed, not
-       rendered, so WAKE_LOCK is unnecessary. -->
+  <!-- For Haptics. A normal permission: granted at install, never prompted.
+       Ambient transitions are observed, not rendered, so WAKE_LOCK is
+       unnecessary. -->
+  <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>

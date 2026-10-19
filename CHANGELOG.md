@@ -1,5 +1,13 @@
 # Changes
 
+## Unreleased
+
+- **`SizzleWearable.haptics`** (2026-10-19): `info()`, `play(HapticEffect)` and
+  `cancel()`. An effect is a list of tiers — composition, predefined, waveform —
+  and the first one the device supports plays; the choice is
+  `HapticsInfo.choose`, a pure function. Media vibration usage. The plugin now
+  declares the `VIBRATE` permission. See the README's *Haptics* section.
+
 ## 0.1.0
 
 - **Fixed: rotary input was not proportional to rotation.** When a device

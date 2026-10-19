@@ -6,6 +6,7 @@ library;
 export 'src/ambient.dart';
 export 'src/display.dart';
 export 'src/frame_rate_provider.dart';
+export 'src/haptics.dart';
 export 'src/power.dart';
 export 'src/rotary.dart';
 export 'src/wearable.dart';
