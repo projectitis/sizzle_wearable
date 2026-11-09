@@ -195,6 +195,26 @@ not offered as presets because the Pixel Watch 3 silently plays nothing for
 them. So the predefined effects and waveforms are the portable base, and a
 composition is an enhancement that has to be checked on every watch it plays on.
 
+## Opening a page on the phone
+
+A watch has no browser, so `SizzleWearable.openOnPhone(url)` sends a web page
+to the paired phone through Wear OS's `RemoteActivityHelper`:
+
+```dart
+final bool opened = await SizzleWearable.openOnPhone('https://example.com');
+if (!opened) showSomethingWentWrong();
+```
+
+- `true` means the phone accepted the request, not that the page loaded.
+- `false` when no phone is connected, when the watch is paired with an
+  iPhone, and off Android, where the plugin is not registered. Use
+  `url_launcher` on other platforms.
+- On success it plays Wear OS's "open on phone" animation
+  (`ConfirmationOverlay.OPEN_ON_PHONE_ANIMATION`), which the platform
+  guidelines ask for because the page appears on another device. Pass
+  `confirm: false` to skip it.
+- Not yet tried on a watch (2026-11-10).
+
 ## Out of scope
 
 **Complications and tiles.** `ComplicationDataSourceService` and `TileService`

@@ -47,6 +47,7 @@ class SizzleWearablePlugin :
     private lateinit var rotaryChannel: EventChannel
     private var applicationContext: Context? = null
     private var haptics: Haptics? = null
+    private var openOnPhone: OpenOnPhone? = null
     private var activity: Activity? = null
     private var rotarySink: EventChannel.EventSink? = null
     private lateinit var ambientChannel: EventChannel
@@ -258,6 +259,7 @@ class SizzleWearablePlugin :
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = binding.applicationContext
         haptics = Haptics(binding.applicationContext)
+        openOnPhone = OpenOnPhone(binding.applicationContext)
         methodChannel = MethodChannel(binding.binaryMessenger, "sizzle_wearable")
         methodChannel.setMethodCallHandler(this)
         rotaryChannel = EventChannel(binding.binaryMessenger, "sizzle_wearable/rotary")
@@ -279,6 +281,7 @@ class SizzleWearablePlugin :
         haptics?.cancel()
         haptics?.dispose()
         haptics = null
+        openOnPhone = null
         applicationContext = null
     }
 
@@ -409,6 +412,19 @@ class SizzleWearablePlugin :
             "hapticCancel" -> {
                 haptics?.cancel()
                 result.success(null)
+            }
+            "openOnPhone" -> {
+                val url = call.argument<String>("url")
+                val opener = openOnPhone
+                if (url == null || opener == null) {
+                    result.success(false)
+                } else {
+                    opener.open(
+                        url,
+                        activity,
+                        call.argument<Boolean>("confirm") ?: true,
+                    ) { opened -> result.success(opened) }
+                }
             }
             else -> result.notImplemented()
         }
