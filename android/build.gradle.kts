@@ -79,6 +79,10 @@ dependencies {
     // drawn while it lasts.
     implementation("androidx.wear:wear:1.3.0")
 
+    // RemoteActivityHelper, for SizzleWearable.openOnPhone: a watch has no
+    // browser, so a web page is opened on the paired phone.
+    implementation("androidx.wear:wear-remote-interactions:1.1.0")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")
 }

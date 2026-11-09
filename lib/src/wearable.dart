@@ -147,6 +147,32 @@ class SizzleWearable {
   /// Android every call does nothing.
   static Haptics get haptics => _haptics;
 
+  /// Open the web page [url] on the phone paired with this watch, and report
+  /// whether the phone accepted it.
+  ///
+  /// A watch has no browser, so the page goes to the phone through Wear OS's
+  /// `RemoteActivityHelper`. `true` means the phone took the request, not
+  /// that the page loaded. `false` when no phone is connected, when the watch
+  /// is paired with an iPhone, and on every platform but Android, where the
+  /// plugin is not registered — use `url_launcher` there.
+  ///
+  /// With [confirm] (the default), success plays Wear OS's "open on phone"
+  /// animation on the watch, which the platform guidelines ask for because
+  /// the result appears on another device.
+  static Future<bool> openOnPhone(String url, {bool confirm = true}) async {
+    try {
+      return await _methods.invokeMethod<bool>(
+            'openOnPhone',
+            <String, Object>{'url': url, 'confirm': confirm},
+          ) ??
+          false;
+    } on MissingPluginException {
+      return false;
+    } on PlatformException {
+      return false;
+    }
+  }
+
   /// Wires the plugin into Sizzle and reports whether it found Wear OS.
   ///
   /// Registers [WearableFrameRateProvider] into `Device.hwFrameRateProvider`,

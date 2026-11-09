@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- **`SizzleWearable.openOnPhone(url)`** (2026-11-10): opens a web page on the
+  paired phone through `RemoteActivityHelper`, and returns whether the phone
+  accepted it. On success it plays Wear OS's "open on phone" animation unless
+  `confirm: false`. New dependency: `androidx.wear:wear-remote-interactions`.
+  See the README's *Opening a page on the phone* section.
 - **`SizzleWearable.haptics`** (2026-10-19): `info()`, `play(HapticEffect)` and
   `cancel()`. An effect is a list of tiers — composition, predefined, waveform —
   and the first one the device supports plays; the choice is
