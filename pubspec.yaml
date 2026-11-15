@@ -14,7 +14,9 @@ dependencies:
   flutter:
     sdk: flutter
   sizzle:
-    path: D:/Projects/flutter/sizzle
+    git:
+      url: https://github.com/projectitis/sizzle.git
+      ref: main
 
 dev_dependencies:
   flutter_test:
